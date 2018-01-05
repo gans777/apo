@@ -323,6 +323,7 @@ echo "<hr>*** ".$pggroup." | ".sizeof($groups)."<br>";
 					//$picname=$picparts[1]; 
 					$thname=$picparts[1];
 					$thdir="$gals_dir/$dir/$pgtemplate"."thumbs";
+					$this_galer="$gals_dir/$dir";/// указывает на папку с галлереей текущей 30.06.2017 
 					//$thpath="$root/$thdir/$thname.jpg";
 					$thpath="$thdir/$pic.jpg";
 
@@ -465,7 +466,13 @@ echo "<hr>*** ".$pggroup." | ".sizeof($groups)."<br>";
 					else $blocks[$blcnt].="<td class=\"link\"><a href='$addcj".$pgname.'_'.$galgroup."_0.html' $target_view>".$new_sign.$galdescr."</a><br><font class=\"copy\">$photos_</font></div></td>";
 				}
 				else	// для не all || $pcnt>0 || thumb2gr
-				{	if ($thlink!='') $blocks[$blcnt].="<div class='thumb'><a href=\"$addcj".tourl($glink)."\" $target_view><img width='$width' src=\"".tourl($thlink)."\"><br>".$new_sign.$galdescr.$photos_."</a></div>";
+				{	
+				 // считывает из базы количество просмотров
+				   $req="SELECT reqs FROM ".$gals_table." WHERE gal='".$dir."'"; myreq();
+		              @$roww=mysql_fetch_row($sth);
+				if ($thlink!='') $blocks[$blcnt].="<div class='thumb'><a href=\"$addcj".tourl($glink)."\" $target_view><img width='$width' src=\"".tourl($thlink)."\"><br>".$new_sign.$galdescr.$photos_."</a><div class='this_data'><i class='fa fa-clock-o' aria-hidden='true'></i>
+<time data-secunix='".date (filemtime($this_galer))."'>". date (" d.m.Y H:i",
+filemtime($this_galer))."</time> <span class='this_view'><i class='fa fa-eye' aria-hidden='true'></i> ".$roww[0]."</span></div></div>";
 					else $blocks[$blcnt].="<td class=\"link\"><a href=\"$addcj".tourl($glink)."\" $target_view>".$new_sign.$galdescr."</a><br><font class=\"copy\">$photos_</font>ccc</td>";
 				}
 /*				{	if ($thlink!='') $blocks[$blcnt].="<td><a href='$addcj".$pgname.'_'.$galgroup."_0.html' $target_view><img width='$width' src=\"".tourl($thlink)."\"></a><br>".$new_sign.$galdescr."$photos_</td>";
